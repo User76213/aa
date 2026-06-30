@@ -17,18 +17,17 @@ def save_seen(seen):
         json.dump(list(seen), f)
 
 def scrape_events():
-    url = "https://www.serebii.net/"
+    url = "https://www.serebii.net/index2.shtml"
     headers = {"User-Agent": "Mozilla/5.0"}
     response = requests.get(url, headers=headers)
     soup = BeautifulSoup(response.content, "html.parser")
 
     events = []
-    for row in soup.select("table tr"):
-        cells = row.find_all("td")
-        if len(cells) >= 2:
-            text = " | ".join(c.get_text(strip=True) for c in cells if c.get_text(strip=True))
-            if text:
-                events.append(text)
+    # Grab all bold/header text as news headlines
+    for tag in soup.find_all(["b", "h2", "h3"]):
+        text = tag.get_text(strip=True)
+        if len(text) > 15:
+            events.append(text)
     return events
 
 def send_to_discord(message):
