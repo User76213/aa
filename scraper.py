@@ -23,11 +23,13 @@ def scrape_events():
     soup = BeautifulSoup(response.content, "html.parser")
 
     events = []
-    # Grab all bold/header text as news headlines
-    for tag in soup.find_all(["b", "h2", "h3"]):
-        text = tag.get_text(strip=True)
-        if len(text) > 15:
-            events.append(text)
+    for link in soup.find_all("a", href=True):
+        text = link.get_text(strip=True)
+        href = link["href"]
+        # Date headers on Serebii follow a pattern like /news/YYYY-MM-DD.shtml
+        if "/news/" in href and text:
+            full_url = "https://www.serebii.net" + href if href.startswith("/") else href
+            events.append(f"{text} — {full_url}")
     return events
 
 def send_to_discord(message):
