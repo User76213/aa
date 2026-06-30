@@ -34,7 +34,7 @@ def scrape_events():
 
 def send_to_discord(message):
     webhook_url = os.environ["DISCORD_WEBHOOK_URL"]
-    data = {"content": f"🎮 **New Serebii Event!**\n{message}"}
+    data = {"content": message}
     requests.post(webhook_url, json=data)
 
 def main():
