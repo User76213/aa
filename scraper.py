@@ -17,7 +17,7 @@ def save_seen(seen):
         json.dump(list(seen), f)
 
 def scrape_events():
-    url = "https://www.serebii.net/games/currentevents.shtml"
+    url = "https://www.serebii.net/"
     headers = {"User-Agent": "Mozilla/5.0"}
     response = requests.get(url, headers=headers)
     soup = BeautifulSoup(response.content, "html.parser")
