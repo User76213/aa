@@ -24,10 +24,10 @@ def scrape_events():
 
     events = []
     for link in soup.find_all("a", href=True):
-        text = link.get_text(strip=True)
         href = link["href"]
-        # Date headers on Serebii follow a pattern like /news/YYYY-MM-DD.shtml
-        if "/news/" in href and text:
+        text = link.get_text(strip=True)
+        # Cast a wider net - catch anything that looks like a date link
+        if any(str(year) in href for year in range(2020, 2027)) and text:
             full_url = "https://www.serebii.net" + href if href.startswith("/") else href
             events.append(f"{text} — {full_url}")
     return events
