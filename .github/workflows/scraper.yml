@@ -1,0 +1,26 @@
+name: Serebii Scraper
+
+on:
+  schedule:
+    - cron: "0 * * * *"  # runs every hour — adjust as needed
+  workflow_dispatch:       # lets you trigger it manually too
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run scraper
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python scraper.py
